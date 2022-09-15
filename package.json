@@ -25,7 +25,7 @@
 			},
 			{
 				"command": "extension.my-md2mediawiki",
-				"title": "MY: Convert markdown to mediawiki(selection -> clipboard)"
+				"title": "MY: Convert markdown to mediawiki(clipboard -> clipboard)"
 			},
 			{
 				"command": "extension.my-mediawiki2md",
