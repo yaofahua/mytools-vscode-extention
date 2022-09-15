@@ -1,28 +1,43 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import * as path from 'path';
+import {spawn, exec} from 'child_process';
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	// console.log('Congratulations, your extension "helloworld-sample" is now active!');
-
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
+	
+	// open file with path in clipboard
 	const disposable = vscode.commands.registerCommand('extension.my-openfile', async () => {
-		// The code you place here will be executed every time your command is executed
-
-		// Display a message box to the user
-		// vscode.window.showInformationMessage('Hello World!');
 
 		const txt = await vscode.env.clipboard.readText();
-		// vscode.commands.executeCommand('vscode.open', vscode.Uri.parse('C:/Users/hw/Desktop/2.txt'));
 		const doc = await vscode.workspace.openTextDocument(vscode.Uri.file(txt));
 		vscode.window.showTextDocument(doc);
 	});
 
 	context.subscriptions.push(disposable);
+
+	// markdown to mediawiki use pandoc
+	const disposable2 = vscode.commands.registerCommand('extension.my-md2mediawiki', async () => {
+
+		var editor = vscode.window.activeTextEditor;
+		if (editor == undefined) {
+			return;
+		}
+
+		var fullName = path.normalize(editor.document.fileName);
+		var filePath = path.dirname(fullName);
+		var targetExec = 'pandoc -s -t mediawiki --toc ' + fullName;
+
+		var child = exec(targetExec, { cwd: filePath }, function(error, stdout, stderr) {
+
+			if (error != null) {
+				vscode.window.showErrorMessage(error.message + "\n" + targetExec);
+			} else if (stderr != null && stderr != '') {
+				vscode.window.showErrorMessage(stderr + "\n" + targetExec);
+			} else {
+				vscode.env.clipboard.writeText(stdout);
+				vscode.window.showInformationMessage("Convert success");
+			}
+		});
+	});
+
+	context.subscriptions.push(disposable2);
 }

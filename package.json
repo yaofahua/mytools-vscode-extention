@@ -2,7 +2,7 @@
 	"name": "mytools",
 	"displayName": "mytools",
 	"description": "mytools for VS Code",
-	"version": "0.0.1",
+	"version": "0.1.1",
 	"publisher": "yaofahua",
 	"repository": "https://github.com/yaofahua/mytools-vscode-extension",
 	"engines": {
@@ -12,7 +12,8 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:extension.my-openfile"
+		"onCommand:extension.my-openfile",
+		"onCommand:extension.my-md2mediawiki"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -20,6 +21,10 @@
 			{
 				"command": "extension.my-openfile",
 				"title": "MY: Open file by path in Sytem Clipboard"
+			},
+			{
+				"command": "extension.my-md2mediawiki",
+				"title": "MY: Convert markdown to mediawiki and put in clipboard"
 			}
 		]
 	},

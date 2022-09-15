@@ -14,9 +14,11 @@ mytools集合了自己使用的一些工具。
 yarn install
 ```
 
-## 编译 & 调试
+### 编译
 
-用VSCode打开工程文件夹，修改代码后，`Run -> Start Debugging`
+```
+yarn compile
+```
 
 ## 打包
 
@@ -40,7 +42,14 @@ vsce package
 code --install-extension mytools-***.vsix
 ```
 
+## VSCode 调试
+
+用VSCode打开工程文件夹，修改代码后，`Run -> Start Debugging`
+
 ## 参考
 
 - VSCode 插件开发（三）：插件打包与本地安装 https://www.jianshu.com/p/bb379a628004
 - VSCode Extension API：https://code.visualstudio.com/api
+- vscode插件开发教程：https://www.jianshu.com/p/e642856f6044
+- Publishing Extensions：https://code.visualstudio.com/api/working-with-extensions/publishing-extension
+- package.json 指南：http://nodejs.cn/learn/the-package-json-guide/
