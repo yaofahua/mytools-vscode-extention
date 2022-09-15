@@ -31,7 +31,7 @@ yarn global add vsce
 ### 打包
 
 ```
-vsce package
+vsce package -o dist
 ```
 
 成功的话，将在项目根目录生成mytools-***.vsix文件。
@@ -39,7 +39,7 @@ vsce package
 ## 本地安装
 
 ```
-code --install-extension mytools-***.vsix
+code --install-extension dist\mytools-***.vsix
 ```
 
 ## VSCode 调试
