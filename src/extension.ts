@@ -14,6 +14,12 @@ export function activate(context: vscode.ExtensionContext)
 
     // mediawiki格式文本转化成markdown格式
     registerCommandMediawikiToMarkdown(context)
+
+    // 创建临时文件
+    registerCommandCreateAndOpenTempFile(context)
+
+    // 打开memo.txt 1.txt 2.txt
+    registerCommandOpenMemoFile(context)
 }
 
 /**
@@ -29,6 +35,47 @@ function isEmpty(str: any): boolean
         return false
     }
 };
+
+function registerCommandOpenMemoFile(context: vscode.ExtensionContext)
+{
+    context.subscriptions.push(vscode.commands.registerCommand('extension.my-openMemoFile', async () => {
+
+        const memoFilePath = "C:\\Users\\hw\\Desktop\\";
+
+        // 打开文件
+        var doc = await vscode.workspace.openTextDocument(vscode.Uri.file(memoFilePath + 'memo.txt'));
+        vscode.window.showTextDocument(doc);
+
+        doc = await vscode.workspace.openTextDocument(vscode.Uri.file(memoFilePath + '1.txt'));
+        vscode.window.showTextDocument(doc);
+
+        doc = await vscode.workspace.openTextDocument(vscode.Uri.file(memoFilePath + '2.txt'));
+        vscode.window.showTextDocument(doc);
+   }));
+}
+
+function registerCommandCreateAndOpenTempFile(context: vscode.ExtensionContext)
+{
+    context.subscriptions.push(vscode.commands.registerCommand('extension.my-createTempFile', async () => {
+
+        // 临时文件名
+        const tempFileName = await vscode.window.showInputBox({ placeHolder: "Temp file name" }) || "";
+        if (isEmpty(tempFileName)) {
+            return;
+        }
+
+        var tempFilePath = path.normalize(path.join(os.tmpdir(), tempFileName));
+
+        // 若不存在就生成
+        if (!fs.existsSync(tempFileName)) {
+            fs.writeFileSync(tempFilePath, "");
+        }
+
+        // 打开文件
+        const doc = await vscode.workspace.openTextDocument(vscode.Uri.file(tempFilePath));
+        vscode.window.showTextDocument(doc);
+    }));
+}
 
 function registerCommandOpenFile(context: vscode.ExtensionContext)
 {
@@ -79,10 +126,13 @@ function registerCommandMediawikiToMarkdown(context: vscode.ExtensionContext)
     context.subscriptions.push(vscode.commands.registerCommand('extension.my-mediawiki2md', async () => {
 
 		// 系统剪贴板内容
-		const txt = await vscode.env.clipboard.readText();
+		var txt = await vscode.env.clipboard.readText();
 		if (isEmpty(txt)) {
 			return;
 		}
+
+        txt = txt.replace(/</g, 'ASDFGHJ');
+        txt = txt.replace(/>/g, 'JHGFDSA');
 
         // 剪贴板内容到临时文件
         fs.writeFileSync(tempFile, txt);
@@ -105,6 +155,9 @@ function registerCommandMediawikiToMarkdown(context: vscode.ExtensionContext)
                 result = result.replace(/`[\s\r\n*]*`/g, '\n');
                 result = result.replace(/[*]*`/g, '\n```\n');
 
+                result = result.replace(/ASDFGHJ/g, '<');
+                result = result.replace(/JHGFDSA/g, '>');
+        
                 vscode.env.clipboard.writeText(result);
                 vscode.window.showInformationMessage("Convert success");
             }
