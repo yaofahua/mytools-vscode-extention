@@ -3,6 +3,7 @@ import * as fs from 'fs'
 import * as os from 'os'
 import * as path from 'path';
 import * as vscode from 'vscode';
+import * as util from './myutil'
 
 export function activate(context: vscode.ExtensionContext)
 {
@@ -20,6 +21,9 @@ export function activate(context: vscode.ExtensionContext)
 
     // 打开memo.txt 1.txt 2.txt
     registerCommandOpenMemoFile(context)
+    
+    // 打开指定目录的文件或文件夹
+    registerCommandOpenFaviFilesOrFolder(context)
 }
 
 /**
@@ -35,6 +39,45 @@ function isEmpty(str: any): boolean
         return false
     }
 };
+
+function registerCommandOpenFaviFilesOrFolder(context: vscode.ExtensionContext)
+{
+    context.subscriptions.push(vscode.commands.registerCommand('extension.my-openFaviFileOrFolder', async () => {
+        //
+        // 关注的路径，true表示递归子目录且只找文件，false表示只查找一级文件夹
+        //
+        var paths = [ [ "C:\\Users\\hw\\Desktop\\mydoc\\docs\\", true ], [ "C:\\Users\\hw\\Desktop\\src\\", false ] ];
+        
+        // 所有指定的文件及文件夹
+        var filesOrFolders: string[] = [];
+        for (var i = 0; i < paths.length; i++) {
+            var path = paths[i];
+
+            // 递归子目录的所有文件
+            if (path[1]) {
+                var files = await util.fileSearch(<string>path[0], false, true, false);
+                filesOrFolders = filesOrFolders.concat(files);
+
+            } else { // 只查找一级文件夹
+                var files2 = await util.fileSearch(<string>path[0], true, false, true);
+                filesOrFolders = filesOrFolders.concat(files2);
+            }
+        }
+
+        // 快速选择
+        var fileOrFolder = await vscode.window.showQuickPick(filesOrFolders);
+
+        // 当前窗口打开文件，新窗口打开文件夹
+        var stat = fs.statSync(<string>fileOrFolder);
+        if (stat.isFile()) {
+            var doc = await vscode.workspace.openTextDocument(vscode.Uri.file(<string>fileOrFolder));
+            vscode.window.showTextDocument(doc);    
+        } else if (stat.isDirectory()) {
+            const terminal = vscode.window.createTerminal("mytools");
+            terminal.sendText(`code ${fileOrFolder}`);
+        }
+    }));
+}
 
 function registerCommandOpenMemoFile(context: vscode.ExtensionContext)
 {
