@@ -1,6 +1,7 @@
 import * as fs from 'fs'
 import * as os from 'os'
 import * as path from 'path';
+import * as vscode from 'vscode'
 
 // 读取文件的逻辑拉出
 export function fsReadDir(dir: string)
@@ -58,4 +59,21 @@ export async function fileSearch(dirPath: string, rootOnly: boolean, includeFile
     }
 
     return ret;
+}
+
+export function getMyTerminal(): vscode.Terminal
+{
+    let term:vscode.Terminal | undefined;
+    for (const terminal of vscode.window.terminals) {
+        if (terminal.name == 'mytools') {
+            term = terminal;
+            break;
+        }
+    }
+
+    if (term == undefined) {
+        term = vscode.window.createTerminal("mytools");
+    }
+
+    return term;
 }

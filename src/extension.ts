@@ -73,8 +73,7 @@ function registerCommandOpenFaviFilesOrFolder(context: vscode.ExtensionContext)
             var doc = await vscode.workspace.openTextDocument(vscode.Uri.file(<string>fileOrFolder));
             vscode.window.showTextDocument(doc);    
         } else if (stat.isDirectory()) {
-            const terminal = vscode.window.createTerminal("mytools");
-            terminal.sendText(`code ${fileOrFolder}`);
+            util.getMyTerminal().sendText(`code ${fileOrFolder}`);
         }
     }));
 }
