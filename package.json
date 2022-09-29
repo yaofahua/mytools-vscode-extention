@@ -12,41 +12,40 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:extension.my-openfile",
-		"onCommand:extension.my-md2mediawiki",
-		"onCommand:extension.my-mediawiki2md",
-		"onCommand:extension.my-createTempFile",
-		"onCommand:extension.my-openMemoFile",
-		"onCommand:extension.my-openFaviFileOrFolder"
+		"onStartupFinished"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "extension.my-openfile",
+				"command": "mytools.openfile",
 				"title": "MY: Open file by path in sytem clipboard"
 			},
 			{
-				"command": "extension.my-md2mediawiki",
-				"title": "MY: Convert markdown to mediawiki(clipboard -> clipboard)"
-			},
-			{
-				"command": "extension.my-mediawiki2md",
+				"command": "mytools.mediawiki2md",
 				"title": "MY: Convert mediawiki to markdown(clipboard -> clipboard)"
 			},
 			{
-				"command": "extension.my-createTempFile",
+				"command": "mytools.createTempFile",
 				"title": "MY: Create and open temp file"
 			},
 			{
-				"command": "extension.my-openMemoFile",
-				"title": "MY: Open memo.txt 1.txt 2.txt"
+				"command": "mytools.openFaviFileOrFolder",
+				"title": "MY: Open MYDOC file or SRC folder"
 			},
 			{
-				"command": "extension.my-openFaviFileOrFolder",
-				"title": "MY: Open MYDOC file or SRC folder"
+				"command": "mytools.openWithFork",
+				"title": "MY: Open folder with Fork git tool"
 			}
-		]
+		],
+		"menus": {
+			"explorer/context": [
+				{
+					"when": "explorerResourceIsFolder",
+					"command": "mytools.openWithFork"
+				}
+			]
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
@@ -60,6 +59,7 @@
 		"@typescript-eslint/eslint-plugin": "^5.30.0",
 		"@typescript-eslint/parser": "^5.30.0",
 		"eslint": "^8.13.0",
-		"typescript": "^4.7.2"
+		"typescript": "^4.7.2",
+		"vsce": "^2.11.0"
 	}
 }
