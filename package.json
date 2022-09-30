@@ -18,6 +18,10 @@
 	"contributes": {
 		"commands": [
 			{
+				"command": "mytools.test",
+				"title": "MY: just for test"
+			},
+			{
 				"command": "mytools.openfile",
 				"title": "MY: Open file by path in sytem clipboard"
 			},

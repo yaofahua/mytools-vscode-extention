@@ -6,6 +6,9 @@ import * as vscode from "vscode";
 import * as util from "./myutil";
 
 export function activate(context: vscode.ExtensionContext) {
+  // just for test
+  registerCommandTest(context);
+
   // 打开系统剪贴板中路径指向的文件
   registerCommandOpenFile(context);
 
@@ -33,6 +36,58 @@ function isEmpty(str: any): boolean {
   } else {
     return false;
   }
+}
+
+function registerCommandTest(context: vscode.ExtensionContext) {
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      "mytools.test",
+      async (fileUri: vscode.Uri) => {
+
+        console.log('mytools.test start');
+        
+        console.log('mytools.test end');
+      }
+    )
+  );
+}
+
+function registerCommandFormatFolder(context: vscode.ExtensionContext) {
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      "mytools.formatFolder",
+      async (fileUri: vscode.Uri) => {
+
+        // 查找所有文件
+        const files = await util.fileSearch(
+          fileUri.fsPath,
+          false,
+          true,
+          false
+        );
+
+        // 遍历文件
+        for (const element of files) {
+          console.log("Format: ", element);
+
+          // 打开文件
+          const doc = await vscode.workspace.openTextDocument(
+            vscode.Uri.file(element)
+          );
+          await vscode.window.showTextDocument(doc);
+
+          // 格式化文件
+          await vscode.commands.executeCommand("prettier.forceFormatDocument");
+
+          // 保存并关闭文件
+          await doc.save();
+          await vscode.commands.executeCommand(
+            "workbench.action.closeActiveEditor"
+          );
+        }
+      }
+    )
+  );
 }
 
 function registerCommandOpenWithFork(context: vscode.ExtensionContext) {
