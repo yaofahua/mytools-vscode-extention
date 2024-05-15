@@ -23,6 +23,15 @@ export function activate(context: vscode.ExtensionContext) {
 
   // 用Fork打开文件夹
   registerCommandOpenWithFork(context);
+
+  // 用Dopus打开文件夹
+  registerCommandOpenWithDopus(context);
+
+  // 用vscode打开文件夹
+  registerCommandOpenWithVscode(context);
+
+  // 用MobaXterm打开文件夹
+  registerCommandOpenWithMobaXterm(context);
 }
 
 /**
@@ -96,6 +105,39 @@ function registerCommandOpenWithFork(context: vscode.ExtensionContext) {
       "mytools.openWithFork",
       (fileUri: vscode.Uri) => {
         util.getMyTerminal().sendText("fork " + fileUri.fsPath);
+      }
+    )
+  );
+}
+
+function registerCommandOpenWithMobaXterm(context: vscode.ExtensionContext) {
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      "mytools.openWithMobaXterm",
+      (fileUri: vscode.Uri) => {
+        util.getMyTerminal().sendText("moba " + fileUri.fsPath);
+      }
+    )
+  );
+}
+
+function registerCommandOpenWithDopus(context: vscode.ExtensionContext) {
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      "mytools.openWithDopus",
+      (fileUri: vscode.Uri) => {
+        util.getMyTerminal().sendText("dopus " + fileUri.fsPath);
+      }
+    )
+  );
+}
+
+function registerCommandOpenWithVscode(context: vscode.ExtensionContext) {
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      "mytools.openWithVsCode",
+      (fileUri: vscode.Uri) => {
+        util.getMyTerminal().sendText("code " + fileUri.fsPath);
       }
     )
   );

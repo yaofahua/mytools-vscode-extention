@@ -40,6 +40,18 @@
 			{
 				"command": "mytools.openWithFork",
 				"title": "MY: Open folder with Fork git tool"
+			},
+			{
+				"command": "mytools.openWithMobaXterm",
+				"title": "MY: Open folder with MobaXterm"
+			},
+			{
+				"command": "mytools.openWithDopus",
+				"title": "MY: Open folder with Dopus"
+			},
+			{
+				"command": "mytools.openWithVsCode",
+				"title": "MY: Open folder with VsCode"
 			}
 		],
 		"menus": {
@@ -47,6 +59,18 @@
 				{
 					"when": "explorerResourceIsFolder",
 					"command": "mytools.openWithFork"
+				},
+				{
+					"when": "explorerResourceIsFolder",
+					"command": "mytools.openWithMobaXterm"
+				},
+				{
+					"when": "explorerResourceIsFolder",
+					"command": "mytools.openWithDopus"
+				},
+				{
+					"when": "explorerResourceIsFolder",
+					"command": "mytools.openWithVsCode"
 				}
 			]
 		}
